@@ -109,6 +109,6 @@ _start:
 	jmp .hang
 .end:
 
-    %include "../Kernel/CPU/interrupt.asm"
-	%include "../Kernel/port.asm"
+    %include "Kernel/CPU/interrupt.asm"
+	%include "Kernel/port.asm"
 	

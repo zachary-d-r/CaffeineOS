@@ -1,5 +1,5 @@
-#include "../Kernel/system.h"
-#include "../Kernel/multiboot.h"
+#include "../system.h"
+#include "../multiboot.h"
 #include "../Drivers/vga.h"
 
 int freeMem;

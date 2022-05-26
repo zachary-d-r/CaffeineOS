@@ -51,6 +51,7 @@ grub-mkrescue -o Binaries/caffieneOS.iso isodir
 
 # To debug qemu:
 #qemu-system-i386 --drive file=disk.img,media=disk,format=raw -cdrom Binaries/caffieneOS.iso -m 16M -boot order=dc -trace enable=ide_*
+# To create disk: qemu-img create -f raw disk.img 1M
 
 # Normal Run:
 qemu-system-i386 -drive file=disk.img,media=disk,format=raw -cdrom Binaries/caffieneOS.iso -m 16M -boot order=dc

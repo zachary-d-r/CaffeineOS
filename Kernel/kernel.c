@@ -1,6 +1,6 @@
 #include "system.h"
 #include "Drivers/vga.h"
-#include "../../Applications/applications.h"
+#include "../Applications/applications.h"
 #include "Drivers/double_buffer.h"
 #include "Drivers/ata.h"
 #include "Filesystem/csfs.h"

@@ -1,6 +1,6 @@
 #include "../Kernel/system.h"
 #include "shell.h"
-#include "../Drivers/vga.h"
+#include "../Kernel/Drivers/vga.h"
 
 int commandCursor;
 char commandBuffer[256];

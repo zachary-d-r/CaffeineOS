@@ -1,5 +1,5 @@
-#include "../system.h"
-#include "../../Applications/applications.h"
+#include "system.h"
+#include "../Applications/applications.h"
 #include "Drivers/vga.h"
 
 char *currentProcess;
