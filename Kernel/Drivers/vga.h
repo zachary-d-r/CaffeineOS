@@ -1,6 +1,16 @@
 #ifndef __VGA_H
 #define __VGA_H
 
+#define PIXLES_HEIGHT 480
+#define PIXLES_WIDTH 640
+
+#define CHAR_SCREEN_HEIGHT PIXLES_HEIGHT/CHAR_HEIGHT
+#define CHAR_SCREEN_WIDTH PIXLES_WIDTH/CHAR_WIDTH
+
+#define CHAR_HEIGHT 16
+#define CHAR_WIDTH 8
+
+
 extern void initializeVGA(unsigned long addr);
 extern void plotPixle(int x, int y, unsigned int color);
 extern void test();

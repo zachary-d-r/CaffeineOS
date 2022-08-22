@@ -3,7 +3,8 @@
 #include "vga.h"
 #include "../../Fonts/font.h"
 
-// The screen is 80x30
+// The screen is 80x30 characters
+// The screen is 640x480 pixles
 
 unsigned char *framebuffer;
 multiboot_info_t *mbi;
@@ -26,18 +27,18 @@ void scroll(void) {
     blank = 0x045ce0 & 0xff;
 
     // If we are at the last rowm scroll up
-    if (cursorY >= 30*16) {
+    if (cursorY >= PIXLES_HEIGHT) {
         // Move current chunk that makes up the screen back in the buffer by one line
-        temp = 16;
-        memcpy(framebuffer, framebuffer + temp*4 * 80*8, (((30*16 + temp) * 80*8) * 4));
+        temp = cursorY - PIXLES_HEIGHT + CHAR_HEIGHT;
+        memcpy(framebuffer, (framebuffer + temp * 6 * PIXLES_WIDTH), (((PIXLES_HEIGHT - temp) * PIXLES_WIDTH) * 8));
 
         // Then we set the last line to the blank character
         // Plot the pixels manually
         for (int i = 0; i <= 16; i++) {
-            for (int j = 0; j <= 80*8; j++) { plotPixle(j, (30*16)-i, bg); }
+            for (int j = 0; j <= PIXLES_WIDTH; j++) { plotPixle(j, (PIXLES_HEIGHT)-i, bg); }
     }
 
-        cursorY = 30*16 - 16;
+        cursorY = PIXLES_HEIGHT - CHAR_HEIGHT;
     }
     /*else if (cursorY < 0) { 
         for (int i = 160 * 2; i < 4000 - 160; i++) *(videoMemory + i - 160) = blank;
@@ -196,10 +197,10 @@ int getCursorY() { return cursorY; }
 
 void putch(char c) {
 
-    if (c == 0x08) { if (cursorX >= 9) { cursorX = cursorX - 8; clearChar(); } }  // Handle a backspace
+    if (c == 0x08) { if (cursorX >= 9) { cursorX = cursorX - CHAR_WIDTH; clearChar(); } }  // Handle a backspace
     else if (c == 0x09) { cursorX = (cursorX + 8*8) & ~(8 - 1); }  // Handle a tab by incrementing the cursor's x, but only to a point that will make it divisable by 8
     else if (c == '\r') { cursorX = 0; }  // Handle a carrige return
-    else if (c == '\n') { cursorX = 0; cursorY = cursorY + 16; }  // Handle a newline
+    else if (c == '\n') { cursorX = 0; cursorY = cursorY + CHAR_HEIGHT; }  // Handle a newline
 
     // Any character > a space is printable
     else if (c >= ' ') {
@@ -207,7 +208,7 @@ void putch(char c) {
         cursorX = cursorX + 8;  // Increment the cursor by 8
     }
 
-    if (cursorX >= 80*8) { cursorX = 0; cursorY = cursorY + 16; }  // Insert a new line if the cursor has hit the edge of the screen
+    if (cursorX >= PIXLES_WIDTH) { cursorX = 0; cursorY = cursorY + CHAR_HEIGHT; }  // Insert a new line if the cursor has hit the edge of the screen
 
     moveCursor(cursorX, cursorY);
     scroll();

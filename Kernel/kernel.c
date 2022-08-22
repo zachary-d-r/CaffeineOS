@@ -39,7 +39,7 @@ void main(unsigned long addr) {
 
     for (int k = 0; k < 12; k++) {ataPioWrite(0x00+k, 2, bwrite);}
 
-    initializeCSFS(addr);
+    //initializeCSFS(addr);
     installTimer(); print("\nPIT... Done\n");
     installKeyboard(); print("Keyboard... Done\n");
 
@@ -48,6 +48,21 @@ void main(unsigned long addr) {
 
     clear();
     moveCursor(0, 0);
+
+    
+    struct csfs_entry entry;
+    entry.start = 0x03;
+    entry.FLAGS = 0b00000000;
+    entry.name = "test";
+    entry.ext = 0b10000000;
+
+    unsigned char *c = "Wow I'm saving this!";
+
+    createFile(c);
+    unsigned char *r = readFile(0x02);
+    unsigned char *w = readFile(r[0]);
+
+    print(w);
 
 
     // unsigned long long *r;
@@ -90,7 +105,7 @@ void main(unsigned long addr) {
 
     //printInt(1);
 
-    init();
+    //init();
     //drawRectangle(10, 34, 100, 2, c);
     //drawRectangle(20, 100, 100, 50, c);
 
