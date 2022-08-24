@@ -3,43 +3,47 @@
 #include "../Drivers/ata.h"
 #include "csfs.h"
 
-void createFile(unsigned char *content) {
+void createFile(unsigned char *name, unsigned char *content) {
     
     unsigned char *file;
     
-    file[0] = 0x03;
-    file[1] = 0b00000000;
+    file[0] = 0xFFFFFF;
+    file[1] = 0b00000000;  // Flags
+    file[2] = 0x03;  // Location of data
+    file[3] = 0b10000000;  // Ext
+    file[4] = 0xFFFFFF;  // End Byte/Location of Next Header
     
-    // File Name
-    file[2] = 't';
-    file[3] = 'e';
-    file[4] = 's';
-    file[5] = 't';
-    file[6] = ' ';
-    file[7] = ' ';
-    file[8] = ' ';
-    file[9] = ' ';
-    file[10] = ' ';
-    file[11] = ' ';
-    file[13] = ' ';
-    file[14] = ' ';
-    file[15] = ' ';
-    file[16] = ' ';
+    for (int i = 0; i < 16; i++) { if (i < strlen(name)) { file[5+i] = name[i]; } else { file[5+i] = 0x00; } }  // File name file[2]-file[16]
     
-    file[17] = 0b10000000;
+    //file[19] = 0xFFFFFF;  // End byte
 
-    putch(file[0]);
-    
+    //for (int i = 0; i < 30; i++) { print(inttostr(file[i])); print(" "); }
+
     ataPioWrite(0x02, 1, file);
-    ataPioWrite(file[0], 1, content);
+    ataPioWrite(file[2], 1, content);
 
 }
 
-unsigned char *readFile(unsigned char lba) {
+unsigned char *readFile(unsigned char *filename) {
+    
     unsigned char *r;
-    ataPioRead(lba, 1, r);
+    unsigned char *fname;
+    unsigned char found = 0;
+    unsigned long lba;
+    unsigned char *content;
 
-    return r;
+    ataPioRead(0x02, 1, r);
+    //for (int i = 0; i < 30; i++) { print(inttostr(r[i])); print(" "); }
+    inttostr(r[2]);
+    //putch(0x08);
+
+    while (found == 0) {
+        for (int i = 0; i < 16; i++) { fname[i] = r[5+i]; }
+        if (strcmp(fname, filename) == 0) { lba = r[2]; found = 1; }
+        else { if (r[4] !=  0xFFFFFF) { ataPioRead(r[4], 1, r); } else { return "FILE NOT FOUND"; } }
+    }
+    ataPioRead(lba, 1, content);
+    return content;
 }
 
 // multiboot_info_t *mbiMemFs;

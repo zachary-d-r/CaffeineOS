@@ -1,8 +1,8 @@
 #ifndef __CSFS_H
 #define __CSFS_H
 
-extern void createFile(unsigned char *content);
-extern unsigned char *readFile(unsigned char lba);
+extern void createFile(unsigned char *name, unsigned char *content);
+extern unsigned char *readFile(unsigned char *filename);
 
 struct csfs_entry {
     unsigned char start;

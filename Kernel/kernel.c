@@ -56,14 +56,15 @@ void main(unsigned long addr) {
     entry.name = "test";
     entry.ext = 0b10000000;
 
-    unsigned char *c = "Wow I'm saving this!";
+    unsigned char *c = "Hello CaffeineOS!!!";
 
-    createFile(c);
-    unsigned char *r = readFile(0x02);
-    unsigned char *w = readFile(r[0]);
+    createFile("hello-world", c);
+    unsigned char *r = readFile("hello-world");
+    //unsigned char *r;
+    //ataPioRead(0x03, 1, r);
+    //unsigned char *w = readFile(r[0]);
 
-    print(w);
-
+    print(r);
 
     // unsigned long long *r;
     // int l = getFreeLBA();
