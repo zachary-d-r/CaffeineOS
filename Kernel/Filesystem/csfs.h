@@ -3,6 +3,7 @@
 
 extern void createFile(unsigned char *name, unsigned char *content);
 extern unsigned char *readFile(unsigned char *filename);
+extern void clearDisk();
 
 struct csfs_entry {
     unsigned char start;

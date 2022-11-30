@@ -1,5 +1,6 @@
 #include "../system.h"
 #include "../../Applications/applications.h"
+#include "../Drivers/double_buffer.h"
 
 // Set channel 0's data register on the PIT
 void timerPhase(int hz) {
@@ -14,6 +15,8 @@ volatile unsigned int timerTicks = 0;
 // Handle the timer by incrementing timerTicks every wime the timer fires. By default, the timer fires 18.222 times a second
 void timerHandler(struct regs *r) {
     timerTicks++;  // Increment our tick count
+    //swapBuffers();
+
 
     // Every 18 cycles (about 1 second) we display a message on the screen
     //if (timerTicks % 2 == 0 && gameRunning == 1) { mainLoop(); }

@@ -3,6 +3,40 @@
 #include "../Drivers/ata.h"
 #include "csfs.h"
 
+/*
+There will be two types of "chunks." We have header chunks, and data chunks.
+Header chunks contain info such as the file name, its flags, extention, directory,
+etc. They always end with the location of the next header chunk.
+
+A data chunk is just the contents of the file, and always ends with the location
+of the next data chunk for the file or an 0xFFFFFF to signify the end of the file.
+
+To read a file, the user will need to provide the directory to the file and its name,
+which will be used to identify the file. then, it will get the contents of the file,
+pipe it into whatever program will decompress it, and then the user will get the contents.
+
+A directory is treared as a file whose contents is a header. The "program" used to read
+a directory file will read the header chunks in the directory. 
+
+Each file header should start with a byte that says it is a file header, and each data cluster
+should start with a byte that says it is a data cluster.
+
+*/
+
+// Initialize the fs
+void initCsfs() {
+
+    unsigned char *header;
+
+    ataPioRead(0x01, 1, header);
+
+    if (header[0] == 0x0D && header[1] == 0x19) {
+        // Create a header
+
+    }
+
+}
+
 void createFile(unsigned char *name, unsigned char *content) {
     
     unsigned char *file;
@@ -44,6 +78,16 @@ unsigned char *readFile(unsigned char *filename) {
     }
     ataPioRead(lba, 1, content);
     return content;
+}
+
+// Clear Disk
+void clearDisk() {
+    char *bwrite[512];
+    for(int i = 0; i < 512; i++) {
+       bwrite[i] = 0x0F;
+    }
+
+    for (int k = 0; k < 12; k++) {ataPioWrite(0x00+k, 2, bwrite);}
 }
 
 // multiboot_info_t *mbiMemFs;

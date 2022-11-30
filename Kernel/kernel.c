@@ -32,13 +32,6 @@ void main(unsigned long addr) {
     print("Initializing Drivers...\n");
     initATA(addr); print("ATA... Done\n");
 
-    char *bwrite[512];
-    for(int i = 0; i < 512; i++) {
-       bwrite[i] = 0x0F;
-    }
-
-    for (int k = 0; k < 12; k++) {ataPioWrite(0x00+k, 2, bwrite);}
-
     //initializeCSFS(addr);
     installTimer(); print("\nPIT... Done\n");
     installKeyboard(); print("Keyboard... Done\n");
@@ -56,14 +49,14 @@ void main(unsigned long addr) {
     entry.name = "test";
     entry.ext = 0b10000000;
 
-    unsigned char *c = "Hello CaffeineOS!!!";
+    unsigned char *c = "Hi there!\nWelcome to CaffeineOS!!\n\n\nThis is a .txt file being saved to the hard drive!! How cool is that?";
 
-    createFile("hello-world", c);
+    //createFile("hello-world", c);
+    //ataPioWrite(0x03, 1, "Test");
     unsigned char *r = readFile("hello-world");
     //unsigned char *r;
     //ataPioRead(0x03, 1, r);
     //unsigned char *w = readFile(r[0]);
-
     print(r);
 
     // unsigned long long *r;
